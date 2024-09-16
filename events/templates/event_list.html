@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load static %}
+
+<!-- Barre de navigation en gris avec une image centrée -->
+<!-- Barre de navigation en gris avec une image centrée -->
+<!-- Barre de navigation en gris avec une image centrée -->
+<nav class="navbar navbar-expand-lg" style="background-color: #6c757d;"> <!-- Gris clair -->
+    <div class="container-fluid">
+        <!-- Image centrée -->
+        <a class="navbar-brand mx-auto" href="#">
+            <img src="{% static 'images/eventmate.png' %}" alt="EventMate" width="150">
+        </a>
+
+        <!-- Bouton de déconnexion et nom d'utilisateur aligné à droite -->
+        <div class="ms-auto">
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item me-3">
+                        <span class="navbar-text text-white">Bonjour, {{ user.username }}  </span> <!-- Nom de l'utilisateur -->
+                    </li>
+                    <li class="nav-item me-3"></li>
+                        <p style="color:#6c757d ;" >ooo</p>
+                    </li>
+                    <li class="nav-item ms-3"> <!-- Ajouter un espace avant le bouton -->
+                        <a href="{% url 'home' %}" class="btn btn-danger">Déconnexion</a> <!-- Bouton de déconnexion -->
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+        <!-- Liens de navigation -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'event_list' %}">Gestion des événements</a>
+                </li>
+            </ul>
+
+            <!-- Formulaire de recherche dans la barre de navigation -->
+            <form class="d-flex" method="GET" action="{% url 'event_list' %}">
+                <input class="form-control me-2" type="search" name="q" placeholder="Rechercher un événement" aria-label="Search" value="{{ request.GET.q }}">
+                <button class="btn btn-success" type="submit">Rechercher</button> <!-- Bouton vert -->
+                <p>************************************</p>
+            </form>
+
+            <!-- Aligner le bouton de déconnexion et nom à droite -->
+            <ul class="navbar-nav ms-auto" >
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text text-white me-3">Bonjour : {{ user.username }}</span>
+                    </li>
+                    <li class="nav-item"></li>
+                        <p>*****</p>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'home' %}" class="btn btn-danger">Déconnexion</a> <!-- Bouton rouge -->
+                    </li>
+                {% else %}
+                    
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Gestion des événements</h2>
+    <a href="{% url 'event_create' %}" class="btn btn-primary mb-3">Créer un événement</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>Heure</th>
+                <th>Lieu</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.title }}</td>
+                <td>{{ event.date }}</td>
+                <td>{{ event.time }}</td>
+                <td>{{ event.location }}</td>
+                <td>
+                    <a href="{% url 'event_update' event.pk %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'event_delete' event.pk %}" class="btn btn-danger btn-sm">Supprimer</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">Aucun événement disponible.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
